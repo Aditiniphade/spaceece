@@ -1,25 +1,27 @@
 pipeline {
-    agent any
-
+    agent any 
     stages {
-        stage('Checkout') {
+        stage('Pull') { 
             steps {
-                // Clone the repository
-                git 'https://github.com/Aditiniphade/spaceece.git'
+                git 'https://github.com/Aditiniphade/spaceece.git' 
             }
         }
-
-        stage('Build') {
+        stage('Build') { 
             steps {
-                // Run a Maven build
-                sh 'mvn clean install'
+               sh '/opt/maven/bin/mvn clean package'
             }
         }
-
-        stage('Test') {
+        stage('test') { 
             steps {
-                // Run tests
-                sh 'mvn test'
+                 withSonarQubeEnv ('sonar') {
+             sh ' /opt/maven/bin/mvn sonar:sonar '
+                }
             }
         }
+        stage('Deploy') { 
+            steps {
+               deploy adapters: [tomcat8(credentialsId: 'tomcat-cred', path: '', url: 'http://65.2.180.102:8080')], contextPath: '/', onFailure: false, war: '*/.war'
+            }
+        }        
     }
+}
