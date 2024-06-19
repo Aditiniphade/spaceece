@@ -8,13 +8,14 @@ pipeline {
         }
         stage('Build') { 
             steps {
-               sh '/opt/maven/bin/mvn clean package'
+                // Run a Maven build
+               sh 'mvn clean install'
             }
         }
         stage('test') { 
             steps {
-                 withSonarQubeEnv ('sonar') {
-             sh ' /opt/maven/bin/mvn sonar:sonar '
+                 // Run test {
+             sh 'mvn test'
                 }
             }
         }
