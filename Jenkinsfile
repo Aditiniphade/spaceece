@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Pull') { 
             steps {
-                git 'https://github.com/Aditiniphade/spaceece.git' 
+                 git branch: 'main', url: 'https://github.com/Aditiniphade/spaceece.git' 
             }
         }
         stage('Build') { 
